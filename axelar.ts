@@ -1,15 +1,16 @@
 import {
   AxelarAssetTransfer,
   AxelarQueryAPI,
+  Environment,
 } from "@axelar-network/axelarjs-sdk";
 
 export async function getDestinationAddressAndFee(
-  fromChain,
-  toChain,
-  destinationAddress,
-  asset,
-  amount,
-  env
+  fromChain: string,
+  toChain: string,
+  destinationAddress: string,
+  asset: string,
+  amount: number,
+  env: Environment
 ) {
   const axelarQuery = new AxelarQueryAPI({
     environment: env,
@@ -33,5 +34,4 @@ export async function getDestinationAddressAndFee(
   });
 
   return { fee, depositAddress };
-  // { fee: { denom: 'uausdc', amount: '150000' } }
 }
