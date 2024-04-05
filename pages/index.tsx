@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import { Environment, importChains } from "@axelar-network/axelarjs-sdk";
 
-import { getEstimatedFee, transfer } from "../axelar";
+import { getDestinationAddressAndFee } from "../axelar";
 import { useEffect, useRef } from "react";
 import { useChainId } from "wagmi";
 import { useQuery } from "@tanstack/react-query";
@@ -39,39 +39,23 @@ const Home: NextPage = () => {
     refetch();
   }, [chain]);
 
-  const handleEstimateGasButtonClick = async () => {
+  const onClickProceed = async () => {
     const fromChain = chain === 1 ? "ethereum" : "base-sepolia";
     const amount = amountInputRef.current?.value;
     const symbol = symbolInputRef.current?.value;
-
-    try {
-      const fee = getEstimatedFee(
-        fromChain,
-        toChainsDropdownRef.current?.value,
-        symbol,
-        amount,
-        chain === 1 ? Environment.MAINNET : Environment.TESTNET
-      );
-      console.log("fee", await fee);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleGetDepositAddressButtonClick = () => {
-    const fromChain = chain === 1 ? "ethereum" : "base-sepolia";
     const env = chain === 1 ? Environment.MAINNET : Environment.TESTNET;
 
-    const symbol = symbolInputRef.current?.value;
     try {
-      const depAdd = transfer(
-        symbol,
+      const data = await getDestinationAddressAndFee(
         fromChain,
         toChainsDropdownRef.current?.value,
         destinationAddressRef.current?.value,
+        symbol,
+        amount,
         env
       );
-      console.log("depAdd", depAdd);
+      console.log("getDestinationAddressAndFee", data);
+
     } catch (error) {
       console.error(error);
     }
@@ -165,18 +149,14 @@ const Home: NextPage = () => {
             />
           </div>
         </div>
-        <div className="mt-4 flex w-full justify-between">
+
+        {/* <SendTransaction data={{destinationAddress: }}/> */}
+        <div className="mt-4 flex w-full justify-end">
           <button
-            onClick={handleGetDepositAddressButtonClick}
+            onClick={onClickProceed}
             className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
           >
-            GET DEPOSIT ADDRESS
-          </button>
-          <button
-            onClick={handleEstimateGasButtonClick}
-            className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
-          >
-            ESTIMATE GAS FEE
+            CONTINUE
           </button>
         </div>
       </main>
