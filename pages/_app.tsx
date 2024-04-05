@@ -9,7 +9,6 @@ import {
   sepolia,
 } from 'wagmi/chains';
 import { getDefaultConfig, RainbowKitProvider } from '@rainbow-me/rainbowkit';
-// import "../styles/styles.css";
 
 const config = getDefaultConfig({
   appName: 'RainbowKit App',

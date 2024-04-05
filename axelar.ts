@@ -25,7 +25,14 @@ export async function transfer(
   destinationAddress,
   env
 ) {
-  console.log("tochain", toChain);
+  console.log(
+    "asset,fromChain,toChain,  destinationAddress,env",
+    asset,
+    fromChain,
+    toChain,
+    destinationAddress,
+    env
+  );
   const axelarAssetTransfer = new AxelarAssetTransfer({
     environment: env,
   });
