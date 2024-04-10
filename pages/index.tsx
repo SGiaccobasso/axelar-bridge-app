@@ -2,15 +2,15 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { Environment, importChains } from "@axelar-network/axelarjs-sdk";
-
-import { getDestinationAddressAndFee } from "../axelar";
 import { useEffect, useRef, useState } from "react";
 import { useChainId } from "wagmi";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import * as React from "react";
 import { useSendTransaction, useWaitForTransactionReceipt } from "wagmi";
-
 import { parseEther } from "viem";
+
+import { getDepositAddress } from "../axelar";
+
 const Home: NextPage = () => {
   const toChainsDropdownRef = useRef<HTMLSelectElement>(null);
   const chain = useChainId();
@@ -24,37 +24,43 @@ const Home: NextPage = () => {
     isPending,
     sendTransaction,
   } = useSendTransaction();
+  const [error, setError] = useState("");
+  const queryClient = useQueryClient();
 
-  const { isLoading: isConfirming, isSuccess: isConfirmed } =
-    useWaitForTransactionReceipt({
-      hash,
-    });
+  const txReceipt = useWaitForTransactionReceipt({
+    hash,
+  });
 
   const fetchData = async () => {
     try {
       return await importChains({
         environment: chain === 1 ? Environment.MAINNET : Environment.TESTNET,
       });
-    } catch (error) {
-      console.error(error);
+    } catch (e) {
+      setError(e.message);
     }
   };
 
   const {
     data: chainsList,
     isLoading,
-    error,
-    refetch,
+    error: e,
   } = useQuery({
     queryKey: ["chains"],
     queryFn: fetchData,
   });
 
   useEffect(() => {
-    refetch();
-  }, [chain]);
+    if (!isLoading) queryClient.invalidateQueries({ queryKey: ["chains"] });
+  }, [chain, isLoading]);
+
+  useEffect(() => {
+    if (errorSendTransaction)
+      setError(errorSendTransaction?.message.split("\n")[0]);
+  }, [errorSendTransaction, isPending]);
 
   const onClickProceed = async () => {
+    setError("");
     setIsLoadingTxData(true);
     const fromChain = chain === 1 ? "ethereum" : "base-sepolia";
     const amount = amountInputRef.current?.value;
@@ -67,7 +73,7 @@ const Home: NextPage = () => {
       symbol
     )
       try {
-        const data = await getDestinationAddressAndFee(
+        const data = await getDepositAddress(
           fromChain,
           toChainsDropdownRef.current?.value,
           destinationAddressRef.current?.value,
@@ -80,9 +86,9 @@ const Home: NextPage = () => {
           to: `0x${data.depositAddress.substring(2)}`,
           value: parseEther(amount),
         });
-      } catch (error) {
+      } catch (e) {
         setIsLoadingTxData(false);
-        console.error(error);
+        setError(e.message);
       }
   };
 
@@ -178,6 +184,9 @@ const Home: NextPage = () => {
           </div>
         </div>
 
+        {error && (
+          <div className="w-full text-red-700 pt-4">⚠️&nbsp;{error}</div>
+        )}
         <div className="mt-4 flex w-full justify-end">
           <button
             disabled={isLoadingTxData}

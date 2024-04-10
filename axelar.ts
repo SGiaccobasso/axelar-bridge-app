@@ -4,7 +4,7 @@ import {
   Environment,
 } from "@axelar-network/axelarjs-sdk";
 
-export async function getDestinationAddressAndFee(
+export async function getDepositAddress(
   fromChain: string,
   toChain: string,
   destinationAddress: string,
@@ -19,12 +19,12 @@ export async function getDestinationAddressAndFee(
     environment: env,
   });
 
-  const { fee } = await axelarQuery.getTransferFee(
-    fromChain,
-    toChain,
-    asset,
-    amount
-  );
+  // const { fee } = await axelarQuery.getTransferFee(
+  //   fromChain,
+  //   toChain,
+  //   asset,
+  //   amount
+  // );
 
   const depositAddress = await axelarAssetTransfer.getDepositAddress({
     fromChain,
@@ -33,5 +33,5 @@ export async function getDestinationAddressAndFee(
     asset,
   });
 
-  return { fee, depositAddress };
+  return { depositAddress };
 }
