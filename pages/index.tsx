@@ -173,7 +173,7 @@ const Home: NextPage = () => {
               type="number"
               ref={amountInputRef}
               id="amount"
-              defaultValue={1}
+              defaultValue={0.00000000001}
               placeholder="Enter amount"
               className="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:border-blue-500"
             />
@@ -182,6 +182,11 @@ const Home: NextPage = () => {
 
         {error && (
           <div className="w-full text-red-700 pt-4">⚠️&nbsp;{error}</div>
+        )}
+        {hash && (
+          <div className="w-full text-green-700 pt-4 break-all">
+            Transaction submited! Hash:&nbsp;{hash}
+          </div>
         )}
         <div className="mt-4 flex w-full justify-end">
           <button
