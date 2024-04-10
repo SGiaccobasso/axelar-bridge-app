@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { useChainId } from "wagmi";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import * as React from "react";
-import { useSendTransaction, useWaitForTransactionReceipt } from "wagmi";
+import { useSendTransaction } from "wagmi";
 import { parseEther } from "viem";
 
 import { getDepositAddress } from "../axelar";
@@ -27,17 +27,13 @@ const Home: NextPage = () => {
   const [error, setError] = useState("");
   const queryClient = useQueryClient();
 
-  const txReceipt = useWaitForTransactionReceipt({
-    hash,
-  });
-
   const fetchData = async () => {
     try {
       return await importChains({
         environment: chain === 1 ? Environment.MAINNET : Environment.TESTNET,
       });
-    } catch (e) {
-      setError(e.message);
+    } catch (e: any) {
+      setError(e?.message);
     }
   };
 
@@ -86,9 +82,9 @@ const Home: NextPage = () => {
           to: `0x${data.depositAddress.substring(2)}`,
           value: parseEther(amount),
         });
-      } catch (e) {
+      } catch (e: any) {
         setIsLoadingTxData(false);
-        setError(e.message);
+        setError(e?.message);
       }
   };
 
