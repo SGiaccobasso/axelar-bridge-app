@@ -80,8 +80,6 @@ const Home: NextPage = () => {
           to: `0x${data.depositAddress.substring(2)}`,
           value: parseEther(amount),
         });
-
-        console.log("getDestinationAddressAndFee", data);
       } catch (error) {
         setIsLoadingTxData(false);
         console.error(error);
@@ -92,7 +90,6 @@ const Home: NextPage = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <Head>
         <title>Token Bridge</title>
-        {/* <link href="/favicon.ico" rel="icon" /> */}
       </Head>
 
       <main className="p-6 bg-white rounded-lg shadow-md w-full max-w-lg">
@@ -104,7 +101,7 @@ const Home: NextPage = () => {
             htmlFor="chains"
             className="block text-sm font-medium text-gray-700"
           >
-            Select Chain
+            Select Destination Chain
           </label>
           <select
             disabled={isLoadingTxData}
@@ -150,7 +147,7 @@ const Home: NextPage = () => {
               htmlFor="symbol"
               className="block text-sm font-medium text-gray-700"
             >
-              Symbol
+              Token Symbol
             </label>
             <input
               disabled={isLoadingTxData}

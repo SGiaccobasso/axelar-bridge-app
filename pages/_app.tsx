@@ -11,7 +11,7 @@ import {
 import { getDefaultConfig, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 
 const config = getDefaultConfig({
-  appName: 'RainbowKit App',
+  appName: 'Token Bridge App',
   projectId: 'YOUR_PROJECT_ID',
   chains: [
     mainnet,
