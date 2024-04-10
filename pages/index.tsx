@@ -160,7 +160,7 @@ const Home: NextPage = () => {
               type="text"
               ref={symbolInputRef}
               id="symbol"
-              defaultValue="matic"
+              defaultValue="eth"
               placeholder="Enter text"
               className="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:border-blue-500"
             />
