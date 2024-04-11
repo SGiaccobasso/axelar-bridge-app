@@ -102,7 +102,7 @@ const Home: NextPage = () => {
         <div className="flex">
           <ConnectButton />
         </div>
-        <div className="mt-8">
+        <div className="mt-6">
           <label
             htmlFor="chains"
             className="block text-sm font-medium text-gray-700"
