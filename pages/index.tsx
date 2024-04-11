@@ -102,7 +102,7 @@ const Home: NextPage = () => {
         <div className="flex">
           <ConnectButton />
         </div>
-        <div className="mt-4">
+        <div className="mt-8">
           <label
             htmlFor="chains"
             className="block text-sm font-medium text-gray-700"
@@ -179,15 +179,16 @@ const Home: NextPage = () => {
             />
           </div>
         </div>
-
-        {error && (
-          <div className="w-full text-red-700 pt-4">⚠️&nbsp;{error}</div>
-        )}
-        {hash && (
-          <div className="w-full text-green-700 pt-4 break-all">
-            Transaction submited! Hash:&nbsp;{hash}
-          </div>
-        )}
+        <div className="flex w-full h-10">
+          {error && (
+            <div className="w-full text-red-700 pt-4">⚠️&nbsp;{error}</div>
+          )}
+          {hash && (
+            <div className="w-full text-green-700 pt-4 break-all">
+              Transaction submited! Hash:&nbsp;{hash}
+            </div>
+          )}
+        </div>
         <div className="mt-4 flex w-full justify-end">
           <LoadingButton onClick={onClickProceed} isLoading={isLoadingTxData}>
             Send

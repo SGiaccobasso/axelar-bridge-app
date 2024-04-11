@@ -13,7 +13,8 @@ const LoadingButton: React.FC<LoadingButtonProps> = ({
     <button
       disabled={isLoading}
       onClick={onClick}
-      className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600 w-40"
+      style={{ backgroundColor: "#0E76FD" }}
+      className="mt-4 text-white px-10 py-2 rounded-xl focus:outline-none transform hover:scale-105 transition-transform duration-100 font-semibold"
     >
       {isLoading ? (
         <>
