@@ -79,7 +79,7 @@ const Home: NextPage = () => {
         <div className="flex justify-between">
           <div className="h-8 flex gap-4 text-xl font-bold text-center justify-center">
             <img className="w-10 h-10" src="/logos/chains/axelar.png" />
-            <div className="mt-1">AXELAR BRIDGE</div>
+            <div className="mt-1">TOKEN BRIDGE</div>
           </div>
           <ConnectButton />
         </div>
