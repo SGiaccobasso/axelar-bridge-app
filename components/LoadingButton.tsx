@@ -2,19 +2,26 @@ interface LoadingButtonProps {
   isLoading: boolean;
   onClick: () => void;
   children: React.ReactNode;
+  variant?: string;
 }
+
+const variants: Record<string, string> = {
+  primary:
+    "mt-4 text-white px-10 py-2 rounded-md focus:outline-none transform hover:scale-105 transition-transform duration-100 font-semibold text-black",
+};
 
 const LoadingButton: React.FC<LoadingButtonProps> = ({
   isLoading,
   onClick,
   children,
+  variant = "primary",
 }) => {
   return (
     <button
       disabled={isLoading}
       onClick={onClick}
-      style={{ backgroundColor: "#0E76FD" }}
-      className="mt-4 text-white px-10 py-2 rounded-xl focus:outline-none transform hover:scale-105 transition-transform duration-100 font-semibold"
+      style={{ backgroundColor: "#FF7AB8" }}
+      className={variants[variant]}
     >
       {isLoading ? (
         <>

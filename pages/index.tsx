@@ -1,28 +1,21 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import type { NextPage } from "next";
 import Head from "next/head";
-import { Environment, importChains } from "@axelar-network/axelarjs-sdk";
 import { useEffect, useRef, useState } from "react";
 import { useChainId } from "wagmi";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import * as React from "react";
 import { useSendTransaction } from "wagmi";
 import { parseEther } from "viem";
 
-import { getDepositAddress } from "../axelar";
+import { getDepositAddress } from "../utils/axelar";
 import LoadingButton from "../components/LoadingButton";
-
-const getEnv = (chainId: Number) =>
-  chainId === 1 ? Environment.MAINNET : Environment.TESTNET;
-
-const getChain = (chainId: Number) =>
-  chainId === 1 ? "ethereum" : "base-sepolia";
+import Dropdown from "../components/Dropdown";
+import { DropdownItem } from "../types/types";
+import { getChain, getEnv } from "../utils/utils";
 
 const Home: NextPage = () => {
-  const toChainsDropdownRef = useRef<HTMLSelectElement>(null);
   const chain = useChainId();
   const amountInputRef = useRef<HTMLInputElement>(null);
-  const symbolInputRef = useRef<HTMLInputElement>(null);
   const destinationAddressRef = useRef<HTMLInputElement>(null);
   const [isLoadingTxData, setIsLoadingTxData] = useState(false);
   const {
@@ -32,26 +25,10 @@ const Home: NextPage = () => {
     sendTransaction,
   } = useSendTransaction();
   const [error, setError] = useState("");
-  const queryClient = useQueryClient();
-
-  const fetchData = async () => {
-    try {
-      return await importChains({
-        environment: getEnv(chain),
-      });
-    } catch (e: any) {
-      setError(e?.message);
-    }
-  };
-
-  const { data: chainsList, isLoading } = useQuery({
-    queryKey: ["chains"],
-    queryFn: fetchData,
-  });
-
-  useEffect(() => {
-    if (!isLoading) queryClient.invalidateQueries({ queryKey: ["chains"] });
-  }, [chain, isLoading]);
+  const [selectedToChain, setSelectedToChain] = useState<DropdownItem | null>(
+    null
+  );
+  const [selectedAsset, setSelectedAsset] = useState<DropdownItem | null>(null);
 
   useEffect(() => {
     if (errorSendTransaction)
@@ -63,21 +40,20 @@ const Home: NextPage = () => {
     setIsLoadingTxData(true);
     const fromChain = getChain(chain);
     const amount = amountInputRef.current?.value;
-    const symbol = symbolInputRef.current?.value;
+    const symbol = selectedAsset?.id;
     const env = getEnv(chain);
     if (
       amount &&
-      toChainsDropdownRef.current?.value &&
+      selectedToChain?.id &&
       destinationAddressRef.current?.value &&
       symbol
     )
       try {
         const data = await getDepositAddress(
           fromChain,
-          toChainsDropdownRef.current?.value,
+          selectedToChain.id,
           destinationAddressRef.current?.value,
           symbol,
-          parseFloat(amount),
           env
         );
         setIsLoadingTxData(false);
@@ -92,44 +68,30 @@ const Home: NextPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-gray-800 text-white">
       <Head>
         <title>Token Bridge</title>
         <link href="/favicon.ico" rel="icon" />
       </Head>
 
-      <main className="p-6 bg-white rounded-lg shadow-md w-full max-w-lg">
+      <main className="p-6 bg-gray-900 rounded-lg shadow-md w-full max-w-lg">
         <div className="flex">
           <ConnectButton />
         </div>
         <div className="mt-6">
-          <label
-            htmlFor="chains"
-            className="block text-sm font-medium text-gray-700"
-          >
+          <label htmlFor="chains" className="block text-sm font-medium">
             Select Destination Chain
           </label>
-          <select
-            disabled={isLoadingTxData}
-            ref={toChainsDropdownRef}
-            id="chains"
-            className="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:border-blue-500"
-          >
-            {chainsList &&
-              chainsList.map((item) => (
-                <option
-                  key={item?.chainName}
-                  value={item?.chainIdentifier[getEnv(chain)]}
-                >
-                  {item?.chainName}
-                </option>
-              ))}
-          </select>
+          <Dropdown
+            option="chains"
+            onSelectValue={setSelectedToChain}
+            value={selectedToChain}
+          />
         </div>
         <div className="mt-4">
           <label
             htmlFor="destinationAddress"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium"
           >
             Destination Address
           </label>
@@ -140,32 +102,22 @@ const Home: NextPage = () => {
             id="destinationAddress"
             defaultValue="0xb4d04eC2e773A39Ae1C20643EcC2b0b7D094f48a"
             placeholder="Enter destination address"
-            className="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:border-blue-500"
+            className="mt-1 block w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-4 focus:outline-none focus:border-blue-500"
           />
         </div>
         <div className="mt-4 flex flex-col md:flex-row gap-4">
           <div className="w-full md:w-1/2">
-            <label
-              htmlFor="symbol"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Token Symbol
+            <label htmlFor="symbol" className="block text-sm font-medium">
+              Token To Send
             </label>
-            <input
-              disabled={isLoadingTxData}
-              type="text"
-              ref={symbolInputRef}
-              id="symbol"
-              defaultValue="eth"
-              placeholder="Enter text"
-              className="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:border-blue-500"
+            <Dropdown
+              option="assets"
+              onSelectValue={setSelectedAsset}
+              value={selectedAsset}
             />
           </div>
           <div className="w-full md:w-1/2">
-            <label
-              htmlFor="amount"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="amount" className="block text-sm font-medium">
               Amount
             </label>
             <input
@@ -175,17 +127,17 @@ const Home: NextPage = () => {
               id="amount"
               defaultValue={0.00001}
               placeholder="Enter amount"
-              className="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:border-blue-500"
+              className="mt-1 block w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-4 focus:outline-none focus:border-blue-500"
             />
           </div>
         </div>
         <div className="flex w-full h-10">
           {error && (
-            <div className="w-full text-red-700 pt-4">⚠️&nbsp;{error}</div>
+            <div className="w-full text-red-400 pt-4">⚠️&nbsp;{error}</div>
           )}
           {hash && (
-            <div className="w-full text-green-700 pt-4 break-all">
-              Transaction submited! Hash:&nbsp;{hash}
+            <div className="w-full text-green-400 pt-4 break-all">
+              Transaction submitted! Hash:&nbsp;{hash}
             </div>
           )}
         </div>
