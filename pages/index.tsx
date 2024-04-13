@@ -12,6 +12,7 @@ import LoadingButton from "../components/LoadingButton";
 import Dropdown from "../components/Dropdown";
 import { DropdownItem } from "../types/types";
 import { getChain, getEnv } from "../utils/utils";
+import TxAnimation from "../components/TxAnimation";
 
 const Home: NextPage = () => {
   const chain = useChainId();
@@ -78,15 +79,27 @@ const Home: NextPage = () => {
         <div className="flex">
           <ConnectButton />
         </div>
-        <div className="mt-6">
-          <label htmlFor="chains" className="block text-sm font-medium">
-            Select Destination Chain
-          </label>
-          <Dropdown
-            option="chains"
-            onSelectValue={setSelectedToChain}
-            value={selectedToChain}
-          />
+        <div className="mt-6 flex gap-8">
+          <div>
+            <label htmlFor="chains" className="block text-sm font-medium">
+              Destination Chain
+            </label>
+            <Dropdown
+              option="chains"
+              onSelectValue={setSelectedToChain}
+              value={selectedToChain}
+            />
+          </div>
+          <div>
+            <label htmlFor="symbol" className="block text-sm font-medium">
+              Token To Send
+            </label>
+            <Dropdown
+              option="assets"
+              onSelectValue={setSelectedAsset}
+              value={selectedAsset}
+            />
+          </div>
         </div>
         <div className="mt-4">
           <label
@@ -106,16 +119,6 @@ const Home: NextPage = () => {
           />
         </div>
         <div className="mt-4 flex flex-col md:flex-row gap-4">
-          <div className="w-full md:w-1/2">
-            <label htmlFor="symbol" className="block text-sm font-medium">
-              Token To Send
-            </label>
-            <Dropdown
-              option="assets"
-              onSelectValue={setSelectedAsset}
-              value={selectedAsset}
-            />
-          </div>
           <div className="w-full md:w-1/2">
             <label htmlFor="amount" className="block text-sm font-medium">
               Amount
@@ -141,6 +144,11 @@ const Home: NextPage = () => {
             </div>
           )}
         </div>
+        <TxAnimation
+          leftImageUrl="/logos/chains/ethereum.svg "
+          movingImageUrl="/logos/assets/usdt.svg "
+          rightImageUrl="/logos/chains/polygon.svg "
+        />
         <div className="mt-4 flex w-full justify-end">
           <LoadingButton onClick={onClickProceed} isLoading={isLoadingTxData}>
             Send

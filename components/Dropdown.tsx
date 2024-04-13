@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { DropdownItem } from "../types/types";
 import useAxelarData from "../hooks/useAxelarData";
+import { motion, Variants } from "framer-motion";
 
 type Option = "chains" | "assets";
 
@@ -19,6 +20,15 @@ const Dropdown: React.FC<DropdownProps> = ({
   const dropdownBtnRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { data: list, isLoading, error } = useAxelarData(option);
+
+  const itemVariants: Variants = {
+    open: {
+      opacity: 1,
+      y: 0,
+      transition: { type: "spring", stiffness: 300, damping: 24 },
+    },
+    closed: { opacity: 0, y: 20, transition: { duration: 0.2 } },
+  };
 
   useEffect(() => {
     if (!list?.length) {
@@ -52,62 +62,90 @@ const Dropdown: React.FC<DropdownProps> = ({
   }, []);
 
   return (
-    <div className="relative">
-      <button
-        onClick={toggleDropdown}
-        className=" transition duration-100 hover:cursor-pointer opacity-100 hover:opacity-40 active:scale-105"
-      >
+    <motion.nav
+      initial={false}
+      animate={isOpen ? "open" : "closed"}
+      className="relative"
+    >
+      <motion.button whileTap={{ scale: 0.92 }} onClick={toggleDropdown}>
         {!isLoading && !error && value && (
           <div className="flex py-2 font-semibold" ref={dropdownBtnRef}>
-            <img
+            <motion.img
+              variants={{
+                open: { rotate: 360 },
+                closed: { rotate: 0 },
+              }}
+              transition={{ duration: 0.3 }}
+              style={{ originY: 0.5, originX: 0.5 }}
               className="w-6 h-6 me-2 rounded-full"
               src={value.image}
               alt="Selected user image"
             />
             {value.name}
-            <svg
-              viewBox="0 0 24 24"
-              width="24"
-              fill="#ffffff"
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-6 h-6"
+            <motion.div
+              variants={{
+                open: { rotate: 180 },
+                closed: { rotate: 0 },
+              }}
+              transition={{ duration: 0.2 }}
+              style={{ originY: 0.58, originX: 0.6 }}
             >
-              <path d="M8.71005 11.71L11.3001 14.3C11.6901 14.69 12.3201 14.69 12.7101 14.3L15.3001 11.71C15.9301 11.08 15.4801 10 14.5901 10H9.41005C8.52005 10 8.08005 11.08 8.71005 11.71Z"></path>
-            </svg>
+              <svg width="20" height="24" viewBox="0 0 20 20" fill="#fff">
+                <path d="M8.71005 11.71L11.3001 14.3C11.6901 14.69 12.3201 14.69 12.7101 14.3L15.3001 11.71C15.9301 11.08 15.4801 10 14.5901 10H9.41005C8.52005 10 8.08005 11.08 8.71005 11.71Z"></path>
+              </svg>
+            </motion.div>
           </div>
         )}
-      </button>
+      </motion.button>
 
-      {isOpen && (
-        <div
-          id="dropdownUsers"
-          className="absolute z-10 bg-white rounded-lg shadow w-60 dark:bg-gray-700"
-          ref={dropdownRef}
+      <motion.div
+        id="dropdownUsers"
+        className="absolute z-10 bg-white rounded-lg shadow w-60 dark:bg-gray-800"
+        ref={dropdownRef}
+        variants={{
+          open: {
+            clipPath: "inset(0% 0% 0% 0% round 10px)",
+            transition: {
+              type: "spring",
+              bounce: 0,
+              duration: 0.3,
+              delayChildren: 0.1,
+              staggerChildren: 0.05,
+            },
+          },
+          closed: {
+            clipPath: "inset(10% 50% 90% 50% round 10px)",
+            transition: {
+              type: "spring",
+              bounce: 0,
+              duration: 0.1,
+            },
+          },
+        }}
+      >
+        <motion.ul
+          className="h-48 py-2 overflow-y-auto text-gray-700 dark:text-gray-200 bg-gray-800"
+          style={{ pointerEvents: isOpen ? "auto" : "none" }}
         >
-          <ul
-            className="h-48 py-2 overflow-y-auto text-gray-700 dark:text-gray-200"
-            aria-labelledby="dropdownUsersButton"
-          >
-            {list &&
-              list.map((item) => (
-                <li key={item.name}>
-                  <div
-                    className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer font-semibold"
-                    onClick={() => handleItemClick(item)}
-                  >
-                    <img
-                      className="w-6 h-6 me-2 rounded-full"
-                      src={item.image}
-                      alt={item.name}
-                    />
-                    {item.name}
-                  </div>
-                </li>
-              ))}
-          </ul>
-        </div>
-      )}
-    </div>
+          {list &&
+            list.map((item) => (
+              <motion.li key={item.name} variants={itemVariants}>
+                <div
+                  className="flex items-center px-4 py-2  hover:bg-black dark:hover:text-white cursor-pointer font-semibold"
+                  onClick={() => handleItemClick(item)}
+                >
+                  <img
+                    className="w-6 h-6 me-2 rounded-full"
+                    src={item.image}
+                    alt={item.name}
+                  />
+                  {item.name}
+                </div>
+              </motion.li>
+            ))}
+        </motion.ul>
+      </motion.div>
+    </motion.nav>
   );
 };
 
