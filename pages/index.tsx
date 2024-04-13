@@ -13,6 +13,7 @@ import Dropdown from "../components/Dropdown";
 import { DropdownItem } from "../types/types";
 import { getChain, getEnv } from "../utils/utils";
 import TxAnimation from "../components/TxAnimation";
+import Header from "../components/Header";
 
 const Home: NextPage = () => {
   const chain = useChainId();
@@ -69,21 +70,14 @@ const Home: NextPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-800 text-white">
+    <div className="min-h-screen flex items-center justify-center bg-gray-800 text-white flex-col">
       <Head>
         <title>Token Bridge</title>
         <link href="/favicon.ico" rel="icon" />
       </Head>
 
+      <Header />
       <main className="p-6 bg-gray-900 rounded-lg shadow-md w-full max-w-lg">
-        <div className="flex justify-between">
-          <div className="h-8 flex gap-4 text-xl font-bold text-center justify-center">
-            <img className="w-10 h-10" src="/logos/chains/axelar.png" />
-            <div className="mt-1">TOKEN BRIDGE</div>
-          </div>
-          <ConnectButton />
-        </div>
-
         <label htmlFor="amount" className="mt-8 block font-medium text-white">
           Send:
         </label>
