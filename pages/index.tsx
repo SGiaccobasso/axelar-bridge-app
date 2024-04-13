@@ -76,67 +76,68 @@ const Home: NextPage = () => {
       </Head>
 
       <main className="p-6 bg-gray-900 rounded-lg shadow-md w-full max-w-lg">
-        <div className="flex">
+        <div className="flex justify-between">
+          <div className="h-8 flex gap-4 text-xl font-bold text-center justify-center">
+            <img className="w-10 h-10" src="/logos/chains/axelar.png" />
+            <div className="mt-1">AXELAR BRIDGE</div>
+          </div>
           <ConnectButton />
         </div>
-        <div className="mt-6 flex gap-8">
-          <div>
-            <label htmlFor="chains" className="block text-sm font-medium">
-              Destination Chain
-            </label>
-            <Dropdown
-              option="chains"
-              onSelectValue={setSelectedToChain}
-              value={selectedToChain}
-            />
-          </div>
-          <div>
-            <label htmlFor="symbol" className="block text-sm font-medium">
-              Token To Send
-            </label>
-            <Dropdown
-              option="assets"
-              onSelectValue={setSelectedAsset}
-              value={selectedAsset}
-            />
-          </div>
-        </div>
-        <div className="mt-4">
-          <label
-            htmlFor="destinationAddress"
-            className="block text-sm font-medium"
-          >
-            Destination Address
-          </label>
-          <input
-            disabled={isLoadingTxData}
-            type="text"
-            ref={destinationAddressRef}
-            id="destinationAddress"
-            defaultValue="0xb4d04eC2e773A39Ae1C20643EcC2b0b7D094f48a"
-            placeholder="Enter destination address"
-            className="mt-1 block w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-4 focus:outline-none focus:border-blue-500"
-          />
-        </div>
-        <div className="mt-4 flex flex-col md:flex-row gap-4">
-          <div className="w-full md:w-1/2">
-            <label htmlFor="amount" className="block text-sm font-medium">
-              Amount
-            </label>
+
+        <label htmlFor="amount" className="mt-8 block font-medium text-white">
+          Send:
+        </label>
+        <div className="mt-2 flex flex-col md:flex-row gap-4 items-center">
+          <div className="relative flex flex-grow">
             <input
+              inputMode="decimal"
               disabled={isLoadingTxData}
-              type="number"
+              type="text"
               ref={amountInputRef}
               id="amount"
               defaultValue={0.00001}
               placeholder="Enter amount"
-              className="mt-1 block w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-4 focus:outline-none focus:border-blue-500"
+              className="text-right font-medium w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-4 focus:outline-none focus:border-blue-500"
             />
+            <div className="ml-4 mt-1">
+              <Dropdown
+                option="assets"
+                onSelectValue={setSelectedAsset}
+                value={selectedAsset}
+              />
+            </div>
           </div>
         </div>
+        <label
+          htmlFor="destinationAddress"
+          className="mt-4 block font-medium text-white"
+        >
+          To:
+        </label>
+        <div className="mt-2 flex flex-col md:flex-row gap-4 items-center">
+          <div className="relative flex flex-grow">
+            <input
+              disabled={isLoadingTxData}
+              type="text"
+              ref={destinationAddressRef}
+              id="destinationAddress"
+              defaultValue="0xb4d04eC2e773A39Ae1C20643EcC2b0b7D094f48a"
+              placeholder="Enter destination address"
+              className="text-right font-medium text-sm text-white w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-4 focus:outline-none focus:border-blue-500"
+            />
+            <div className="ml-4 mt-1">
+              <Dropdown
+                option="chains"
+                onSelectValue={setSelectedToChain}
+                value={selectedToChain}
+              />
+            </div>
+          </div>
+        </div>
+
         <div className="flex w-full h-10">
           {error && (
-            <div className="w-full text-red-400 pt-4">⚠️&nbsp;{error}</div>
+            <div className="w-full text-red-700 pt-4">⚠️&nbsp;{error}</div>
           )}
           {hash && (
             <div className="w-full text-green-400 pt-4 break-all">
@@ -144,11 +145,11 @@ const Home: NextPage = () => {
             </div>
           )}
         </div>
-        <TxAnimation
+        {/* <TxAnimation
           leftImageUrl="/logos/chains/ethereum.svg "
           movingImageUrl="/logos/assets/usdt.svg "
           rightImageUrl="/logos/chains/polygon.svg "
-        />
+        /> */}
         <div className="mt-4 flex w-full justify-end">
           <LoadingButton onClick={onClickProceed} isLoading={isLoadingTxData}>
             Send

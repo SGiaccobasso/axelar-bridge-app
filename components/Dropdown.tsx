@@ -65,11 +65,11 @@ const Dropdown: React.FC<DropdownProps> = ({
     <motion.nav
       initial={false}
       animate={isOpen ? "open" : "closed"}
-      className="relative"
+      className="relative flex justify-end"
     >
       <motion.button whileTap={{ scale: 0.92 }} onClick={toggleDropdown}>
         {!isLoading && !error && value && (
-          <div className="flex py-2 font-semibold" ref={dropdownBtnRef}>
+          <div className="flex font-semibold" ref={dropdownBtnRef}>
             <motion.img
               variants={{
                 open: { rotate: 360 },
@@ -77,22 +77,24 @@ const Dropdown: React.FC<DropdownProps> = ({
               }}
               transition={{ duration: 0.3 }}
               style={{ originY: 0.5, originX: 0.5 }}
-              className="w-6 h-6 me-2 rounded-full"
+              className="w-8 h-8 rounded-full"
               src={value.image}
               alt="Selected user image"
             />
-            {value.name}
-            <motion.div
-              variants={{
-                open: { rotate: 180 },
-                closed: { rotate: 0 },
-              }}
-              transition={{ duration: 0.2 }}
-              style={{ originY: 0.58, originX: 0.6 }}
-            >
-              <svg width="20" height="24" viewBox="0 0 20 20" fill="#fff">
-                <path d="M8.71005 11.71L11.3001 14.3C11.6901 14.69 12.3201 14.69 12.7101 14.3L15.3001 11.71C15.9301 11.08 15.4801 10 14.5901 10H9.41005C8.52005 10 8.08005 11.08 8.71005 11.71Z"></path>
-              </svg>
+            <motion.div className="mt-1">
+              {/* {value.name} */}
+              <motion.div
+                variants={{
+                  open: { rotate: 180 },
+                  closed: { rotate: 0 },
+                }}
+                transition={{ duration: 0.2 }}
+                style={{ originY: 0.58, originX: 0.6 }}
+              >
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="#fff">
+                  <path d="M8.71005 11.71L11.3001 14.3C11.6901 14.69 12.3201 14.69 12.7101 14.3L15.3001 11.71C15.9301 11.08 15.4801 10 14.5901 10H9.41005C8.52005 10 8.08005 11.08 8.71005 11.71Z"></path>
+                </svg>
+              </motion.div>
             </motion.div>
           </div>
         )}
@@ -100,7 +102,7 @@ const Dropdown: React.FC<DropdownProps> = ({
 
       <motion.div
         id="dropdownUsers"
-        className="absolute z-10 bg-white rounded-lg shadow w-60 dark:bg-gray-800"
+        className="absolute z-10 bg-white rounded-lg shadow w-60 dark:bg-gray-800 right-0 top-10"
         ref={dropdownRef}
         variants={{
           open: {
