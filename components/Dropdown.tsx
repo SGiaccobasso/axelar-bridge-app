@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { DropdownItem } from "../types/types";
 import useAxelarData from "../hooks/useAxelarData";
 import { motion, Variants } from "framer-motion";
+import LoadingSpinner from "./LoadingSpinner";
 
 type Option = "chains" | "assets";
 
@@ -67,8 +68,12 @@ const Dropdown: React.FC<DropdownProps> = ({
       animate={isOpen ? "open" : "closed"}
       className="relative flex justify-end"
     >
-      <motion.button whileTap={{ scale: 0.92 }} onClick={toggleDropdown}>
-        {!isLoading && !error && value && (
+      <motion.button
+        whileTap={{ scale: 0.92 }}
+        onClick={toggleDropdown}
+        className="w-12"
+      >
+        {!isLoading && !error && value ? (
           <div className="flex font-semibold" ref={dropdownBtnRef}>
             <motion.img
               variants={{
@@ -96,6 +101,10 @@ const Dropdown: React.FC<DropdownProps> = ({
                 </svg>
               </motion.div>
             </motion.div>
+          </div>
+        ) : (
+          <div className="mt-1 ml-2">
+            <LoadingSpinner w={24} h={24} />
           </div>
         )}
       </motion.button>
