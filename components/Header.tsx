@@ -1,5 +1,6 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { motion } from "framer-motion";
+import { CustomConnectBtn } from "./CustomConnectBtn";
 
 const Header = () => {
   return (
@@ -45,12 +46,7 @@ const Header = () => {
           </motion.div>
         </div>
 
-        <ConnectButton
-          accountStatus={{
-            smallScreen: "avatar",
-            largeScreen: "full",
-          }}
-        />
+        <CustomConnectBtn />
       </div>
     </header>
   );
