@@ -94,7 +94,6 @@ const Home: NextPage = () => {
       <Head>
         <title>Token Bridge</title>
         <link href="/favicon.ico" rel="icon" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
       <Header />
@@ -190,7 +189,7 @@ const Home: NextPage = () => {
                       placeholder="Enter destination address"
                       autoCorrect="off"
                       spellCheck="false"
-                      className="h-20 text-right font-medium text-sm text-white w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-4 focus:outline-none focus:border-blue-500"
+                      className="h-24 text-right font-medium text-md text-white w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-4 focus:outline-none focus:border-blue-500"
                       style={{ resize: "none" }}
                     />
                     <motion.div className="ml-4 mt-1">
