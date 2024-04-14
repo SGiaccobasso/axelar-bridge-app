@@ -3,6 +3,7 @@ import { DropdownItem } from "../types/types";
 import useAxelarData from "../hooks/useAxelarData";
 import { motion, Variants } from "framer-motion";
 import LoadingSpinner from "./LoadingSpinner";
+import Image from "next/image";
 
 type Option = "chains" | "assets";
 
@@ -139,15 +140,33 @@ const Dropdown: React.FC<DropdownProps> = ({
           style={{ pointerEvents: isOpen ? "auto" : "none" }}
         >
           {list &&
-            list.map((item) => (
-              <motion.li key={item.name} variants={itemVariants}>
+            list.map((item, i) => (
+              <motion.li key={item.name + i} variants={itemVariants}>
                 <div
                   className="flex items-center px-4 py-2  hover:bg-black dark:hover:text-white cursor-pointer font-semibold"
                   onClick={() => handleItemClick(item)}
                 >
-                  <img
-                    className="w-6 h-6 me-2 rounded-full"
+                  <Image
+                    className="me-2 rounded-full"
                     src={item.image}
+                    height={26}
+                    width={26}
+                    onError={(e) => {
+                      console.log(
+                        "eeeeee",
+                        item.image,
+                        item.image.replace(".svg", ".png"),
+                        e
+                      );
+                      if (e.currentTarget.src.includes(".svg"))
+                        e.currentTarget.src = item.image.replace(
+                          ".svg",
+                          ".png"
+                        );
+                      else {
+                        e.currentTarget.src = '/assets/icons/cross.svg'
+                      }
+                    }}
                     alt={item.name}
                   />
                   {item.name}
