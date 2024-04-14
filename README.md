@@ -1,6 +1,6 @@
 # Axelar Token Bridge App
 
-Simple app to bridge tokens using a deposit address from Axelar.
+Bridge tokens using a deposit address from Axelar.
 
 ## Stack
 
