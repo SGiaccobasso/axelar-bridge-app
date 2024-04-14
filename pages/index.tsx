@@ -5,16 +5,17 @@ import { useChainId } from "wagmi";
 import * as React from "react";
 import { useSendTransaction } from "wagmi";
 import { parseEther } from "viem";
+import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 
 import { getDepositAddress } from "../utils/axelar";
 import LoadingButton from "../components/LoadingButton";
 import Dropdown from "../components/Dropdown";
 import { DropdownItem } from "../types/types";
 import { getChain, getEnv } from "../utils/utils";
-import TxAnimation from "../components/TxAnimation";
 import Header from "../components/Header";
 import Starfield from "../components/StarsBackground";
 import localFont from "next/font/local";
+import Image from "next/image";
 
 const petitinhoFont = localFont({ src: "./fonts/Petitinho.ttf" });
 
@@ -22,11 +23,12 @@ const Home: NextPage = () => {
   const chain = useChainId();
   const amountInputRef = useRef<HTMLInputElement>(null);
   const destinationAddressRef = useRef<HTMLTextAreaElement>(null);
-  const [isLoadingTxData, setIsLoadingTxData] = useState(false);
+  const [isLoadingTx, setIsLoadingTx] = useState(false);
   const {
     data: hash,
     error: errorSendTransaction,
     isPending,
+    reset: resetTx,
     sendTransaction,
   } = useSendTransaction();
   const [error, setError] = useState("");
@@ -36,13 +38,20 @@ const Home: NextPage = () => {
   const [selectedAsset, setSelectedAsset] = useState<DropdownItem | null>(null);
 
   useEffect(() => {
-    if (errorSendTransaction)
+    if (errorSendTransaction) {
+      setIsLoadingTx(false);
       setError(errorSendTransaction?.message.split("\n")[0]);
+    }
+    if (hash) setIsLoadingTx(false);
   }, [errorSendTransaction, isPending]);
 
-  const onClickProceed = async () => {
+  const onClickFinish = () => {
     setError("");
-    setIsLoadingTxData(true);
+    resetTx();
+  };
+
+  const onClickProceed = async () => {
+    setIsLoadingTx(true);
     const fromChain = getChain(chain);
     const amount = amountInputRef.current?.value;
     const symbol = selectedAsset?.id;
@@ -61,17 +70,16 @@ const Home: NextPage = () => {
           symbol,
           env
         );
-        setIsLoadingTxData(false);
         sendTransaction({
           to: `0x${data.depositAddress.substring(2)}`,
           value: parseEther(amount),
         });
       } catch (e: any) {
-        setIsLoadingTxData(false);
+        setIsLoadingTx(false);
         setError(e?.message);
       }
   };
-  console.log("myfont", petitinhoFont.className);
+
   return (
     <main
       className={`${petitinhoFont.className} min-h-screen flex items-center justify-center bg-black text-white flex-col`}
@@ -88,83 +96,134 @@ const Home: NextPage = () => {
       </Head>
 
       <Header />
-      <div className="p-6 bg-gray-900 rounded-lg shadow-md w-full max-w-sm border border-blue-600">
-        <div className="justify-center w-full flex text-xl text-blue-500">CREATE TX</div>
-        <label htmlFor="amount" className="mt-5 block font-medium text-white">
-          Send:
-        </label>
-        <div className="mt-2 flex md:flex-row gap-4 items-center">
-          <div className="relative flex flex-grow">
-            <input
-              inputMode="decimal"
-              disabled={isLoadingTxData}
-              type="text"
-              ref={amountInputRef}
-              id="amount"
-              defaultValue={0.00001}
-              placeholder="Enter amount"
-              className="text-right font-medium w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-4 focus:outline-none focus:border-blue-500"
-            />
-            <div className="ml-4 mt-1">
-              <Dropdown
-                option="assets"
-                onSelectValue={setSelectedAsset}
-                value={selectedAsset}
-              />
-            </div>
-          </div>
-        </div>
-        <label
-          htmlFor="destinationAddress"
-          className="mt-4 block font-medium text-white"
+      <LayoutGroup>
+        <motion.div
+          layout
+          className="p-6 bg-gray-900 rounded-lg shadow-md w-full max-w-sm border border-blue-600"
         >
-          To:
-        </label>
-        <div className="mt-2 flex md:flex-row gap-4 items-center">
-          <div className="relative flex flex-grow">
-            <textarea
-              disabled={isLoadingTxData}
-              ref={destinationAddressRef}
-              id="destinationAddress"
-              defaultValue="0xb4d04eC2e773A39Ae1C20643EcC2b0b7D094f48a"
-              placeholder="Enter destination address"
-              autoCorrect="off"
-              spellCheck="false"
-              className="h-20 text-right font-medium text-sm text-white w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-4 focus:outline-none focus:border-blue-500"
-              style={{ resize: "none" }}
-            />
-            <div className="ml-4 mt-1">
-              <Dropdown
-                option="chains"
-                onSelectValue={setSelectedToChain}
-                value={selectedToChain}
-              />
-            </div>
-          </div>
-        </div>
+          <motion.div className="justify-center w-full flex text-xl text-blue-500">
+            {!hash &&
+              (!isLoadingTx ? (
+                error ? (
+                  <motion.div className="text-red-700">
+                    ERROR WITH TX
+                  </motion.div>
+                ) : (
+                  "CREATE TX"
+                )
+              ) : (
+                "LOADING TRANSACTION..."
+              ))}
+          </motion.div>
+          {!isLoadingTx ? (
+            hash ? (
+              <AnimatePresence>
+                <motion.div className="w-full flex flex-col text-green-400 pt-4 break-all items-center">
+                  <motion.img
+                    height={100}
+                    width={100}
+                    src="/assets/animations/check.svg"
+                  />
+                  <motion.div className="my-5">
+                    Transaction submitted!
+                  </motion.div>
+                  {/*  Hash:&nbsp;{hash} */}
+                  <motion.div className="mt-4 flex w-full justify-end">
+                    <LoadingButton onClick={onClickFinish} isLoading={false}>
+                      ok
+                    </LoadingButton>
+                  </motion.div>
+                </motion.div>
+              </AnimatePresence>
+            ) : error ? (
+              <AnimatePresence>
+                <motion.div className="w-full my-8 text-red-700">
+                  {error}
+                </motion.div>
+                <div className="mt-4 flex w-full justify-end">
+                  <LoadingButton onClick={onClickFinish} isLoading={false}>
+                    ok
+                  </LoadingButton>
+                </div>
+              </AnimatePresence>
+            ) : (
+              <>
+                <label
+                  htmlFor="amount"
+                  className="mt-5 block font-medium text-white"
+                >
+                  Send:
+                </label>
+                <motion.div className="mt-2 flex md:flex-row gap-4 items-center">
+                  <motion.div className="relative flex flex-grow">
+                    <input
+                      inputMode="decimal"
+                      disabled={isLoadingTx}
+                      type="text"
+                      ref={amountInputRef}
+                      id="amount"
+                      defaultValue={0.00001}
+                      placeholder="Enter amount"
+                      className="text-right font-medium w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-4 focus:outline-none focus:border-blue-500"
+                    />
+                    <motion.div className="ml-4 mt-1">
+                      <Dropdown
+                        option="assets"
+                        onSelectValue={setSelectedAsset}
+                        value={selectedAsset}
+                      />
+                    </motion.div>
+                  </motion.div>
+                </motion.div>
+                <label
+                  htmlFor="destinationAddress"
+                  className="mt-4 block font-medium text-white"
+                >
+                  To:
+                </label>
+                <motion.div className="mt-2 flex md:flex-row gap-4 items-center">
+                  <motion.div className="relative flex flex-grow">
+                    <textarea
+                      disabled={isLoadingTx}
+                      ref={destinationAddressRef}
+                      id="destinationAddress"
+                      defaultValue="0xb4d04eC2e773A39Ae1C20643EcC2b0b7D094f48a"
+                      placeholder="Enter destination address"
+                      autoCorrect="off"
+                      spellCheck="false"
+                      className="h-20 text-right font-medium text-sm text-white w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-4 focus:outline-none focus:border-blue-500"
+                      style={{ resize: "none" }}
+                    />
+                    <motion.div className="ml-4 mt-1">
+                      <Dropdown
+                        option="chains"
+                        onSelectValue={setSelectedToChain}
+                        value={selectedToChain}
+                      />
+                    </motion.div>
+                  </motion.div>
+                </motion.div>
 
-        <div className="flex w-full h-10">
-          {error && (
-            <div className="w-full text-red-700 pt-4">{error}</div>
+                <motion.div className="mt-10 flex w-full justify-end">
+                  <LoadingButton onClick={onClickProceed} isLoading={false}>
+                    Send
+                  </LoadingButton>
+                </motion.div>
+              </>
+            )
+          ) : (
+            <motion.div className="flex w-full items-center justify-center">
+              <Image
+                height={100}
+                width={100}
+                className="m-5"
+                alt="axelar logo loading animation"
+                src="/assets/animations/logo.svg"
+              />
+            </motion.div>
           )}
-          {hash && (
-            <div className="w-full text-green-400 pt-4 break-all">
-              Transaction submitted!
-              {/*  Hash:&nbsp;{hash} */}
-            </div>
-          )}
-        </div>
-        {/* <TxAnimation
-          leftImageUrl="/logos/chains/ethereum.svg "
-          movingImageUrl="/logos/assets/usdt.svg "
-          rightImageUrl="/logos/chains/polygon.svg "
-        /> */}
-        <div className="mt-4 flex w-full justify-end">
-          <LoadingButton onClick={onClickProceed} isLoading={isLoadingTxData}>
-            Send
-          </LoadingButton>
-        </div>
-      </div>
+        </motion.div>
+      </LayoutGroup>
     </main>
   );
 };

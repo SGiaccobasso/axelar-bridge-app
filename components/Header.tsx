@@ -28,13 +28,13 @@ const Header = () => {
             {"TOKEN BRIDGE".split("").map((el, i) => (
               <motion.span
                 initial={{ opacity: 0 }}
-                animate={{ opacity: [0, 1, 0] }}
+                animate={{ opacity: [0, 1, 1] }}
                 style={{ color: "#3898FF" }}
                 transition={{
                   times: [0, 0.8, 1],
-                  duration: 8,
+                  duration: 5,
                   delay: i / 6,
-                  repeat: Infinity,
+                  repeat: 0,
                   repeatDelay: 2,
                 }}
                 key={i}
