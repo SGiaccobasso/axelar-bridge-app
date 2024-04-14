@@ -9,6 +9,8 @@ Simple app to bridge tokens using a deposit address from Axelar.
 - Wagmi
 - Axelar JS SDK
 - Tailwind
+- Framer Motion
+- React Query
 
 ## Deployment
 
