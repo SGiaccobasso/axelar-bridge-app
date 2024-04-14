@@ -1,7 +1,7 @@
 import LoadingSpinner from "./LoadingSpinner";
 
 interface LoadingButtonProps {
-  isLoading: boolean;
+  isLoading?: boolean;
   onClick: () => void;
   children: React.ReactNode;
   variant?: string;
@@ -13,7 +13,7 @@ const variants: Record<string, string> = {
 };
 
 const LoadingButton: React.FC<LoadingButtonProps> = ({
-  isLoading,
+  isLoading = false,
   onClick,
   children,
   variant = "primary",
@@ -23,7 +23,6 @@ const LoadingButton: React.FC<LoadingButtonProps> = ({
       disabled={isLoading}
       onClick={onClick}
       className={variants[variant]}
-    //   style={{ backgroundColor: "#3898FF" }}
     >
       {isLoading ? (
         <div className="px-2">

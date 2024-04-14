@@ -32,21 +32,21 @@ export const CustomConnectBtn = () => {
             {(() => {
               if (!connected) {
                 return (
-                  <LoadingButton onClick={openConnectModal} isLoading={false}>
+                  <LoadingButton onClick={openConnectModal}>
                     Connect Wallet
                   </LoadingButton>
                 );
               }
               if (chain.unsupported) {
                 return (
-                  <LoadingButton onClick={openChainModal} isLoading={false}>
+                  <LoadingButton onClick={openChainModal}>
                     Wrong network
                   </LoadingButton>
                 );
               }
               return (
                 <div style={{ display: "flex", gap: 12 }}>
-                  <LoadingButton onClick={openChainModal} isLoading={false}>
+                  <LoadingButton onClick={openChainModal}>
                     <div className="flex justify-between items-center">
                       {chain.hasIcon && (
                         <div
@@ -71,7 +71,7 @@ export const CustomConnectBtn = () => {
                       {chain.name}
                     </div>
                   </LoadingButton>
-                  <LoadingButton onClick={openAccountModal} isLoading={false}>
+                  <LoadingButton onClick={openAccountModal}>
                     {account.displayName}
                     {account.displayBalance
                       ? ` (${account.displayBalance})`

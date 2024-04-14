@@ -127,11 +127,8 @@ const Home: NextPage = () => {
                   <motion.div className="my-5">
                     Transaction submitted!
                   </motion.div>
-                  {/*  Hash:&nbsp;{hash} */}
                   <motion.div className="mt-4 flex w-full justify-end">
-                    <LoadingButton onClick={onClickFinish} isLoading={false}>
-                      ok
-                    </LoadingButton>
+                    <LoadingButton onClick={onClickFinish}>ok</LoadingButton>
                   </motion.div>
                 </motion.div>
               </AnimatePresence>
@@ -141,9 +138,7 @@ const Home: NextPage = () => {
                   {error}
                 </motion.div>
                 <div className="mt-4 flex w-full justify-end">
-                  <LoadingButton onClick={onClickFinish} isLoading={false}>
-                    ok
-                  </LoadingButton>
+                  <LoadingButton onClick={onClickFinish}>ok</LoadingButton>
                 </div>
               </AnimatePresence>
             ) : (
@@ -205,9 +200,7 @@ const Home: NextPage = () => {
                 </motion.div>
 
                 <motion.div className="mt-10 flex w-full justify-end">
-                  <LoadingButton onClick={onClickProceed} isLoading={false}>
-                    Send
-                  </LoadingButton>
+                  <LoadingButton onClick={onClickProceed}>Send</LoadingButton>
                 </motion.div>
               </>
             )
