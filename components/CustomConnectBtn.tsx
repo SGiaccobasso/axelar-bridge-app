@@ -1,5 +1,6 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import LoadingButton from "./LoadingButton";
+import Image from "next/image";
 
 export const CustomConnectBtn = () => {
   return (
@@ -56,7 +57,6 @@ export const CustomConnectBtn = () => {
                             height: 20,
                             borderRadius: 999,
                             overflow: "hidden",
-                            marginRight: 14,
                           }}
                         >
                           {chain.iconUrl && (
@@ -68,15 +68,27 @@ export const CustomConnectBtn = () => {
                           )}
                         </div>
                       )}
-                      {chain.name}
+                      <div className="hidden md:block ml-5">{chain.name}</div>
                     </div>
                   </LoadingButton>
-                  <LoadingButton onClick={openAccountModal}>
-                    {account.displayName}
-                    {account.displayBalance
-                      ? ` (${account.displayBalance})`
-                      : ""}
-                  </LoadingButton>
+                  <div className="hidden lg:block">
+                    <LoadingButton onClick={openAccountModal}>
+                      {account.displayName}
+                      {account.displayBalance
+                        ? ` (${account.displayBalance})`
+                        : ""}
+                    </LoadingButton>
+                  </div>
+                  <div className="block lg:hidden">
+                    <LoadingButton onClick={openAccountModal}>
+                      <Image
+                        alt="avatar"
+                        width={24}
+                        height={24}
+                        src={account.ensAvatar || "/assets/icons/avatar.svg"}
+                      ></Image>
+                    </LoadingButton>
+                  </div>
                 </div>
               );
             })()}

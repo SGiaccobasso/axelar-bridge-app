@@ -25,7 +25,7 @@ const Header = () => {
                 "invert(54%) sepia(81%) saturate(516%) hue-rotate(173deg) brightness(102%) contrast(101%)",
             }}
           ></motion.img>
-          <motion.div className="mt-1.5 hidden md:block">
+          <motion.div className="mt-1.5 hidden sm:block">
             {"TOKEN BRIDGE".split("").map((el, i) => (
               <motion.span
                 initial={{ opacity: 0 }}
