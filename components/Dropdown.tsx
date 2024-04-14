@@ -135,7 +135,7 @@ const Dropdown: React.FC<DropdownProps> = ({
         }}
       >
         <motion.ul
-          className="h-48 py-2 overflow-y-auto text-gray-700 dark:text-gray-200 bg-gray-800"
+          className="h-48 py-2 overflow-y-auto text-gray-400 dark:text-gray-200 bg-gray-800"
           style={{ pointerEvents: isOpen ? "auto" : "none" }}
         >
           {list &&
