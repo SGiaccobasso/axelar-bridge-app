@@ -125,7 +125,7 @@ const Home: NextPage = () => {
                   <motion.img
                     height={100}
                     width={100}
-                    src="/assets/animations/check.svg"
+                    src="/assets/icons/check.svg"
                   />
                   <motion.div className="my-5">
                     Transaction submitted!
