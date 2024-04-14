@@ -31,10 +31,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         <RainbowKitProvider
           modalSize="compact"
           theme={midnightTheme({
-            borderRadius: 'small',
-            fontStack: 'system',
+            borderRadius: "small",
+            fontStack: "system",
           })}
-    
         >
           <Component {...pageProps} />
         </RainbowKitProvider>

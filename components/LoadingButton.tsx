@@ -9,7 +9,7 @@ interface LoadingButtonProps {
 
 const variants: Record<string, string> = {
   primary:
-    "text-white px-10 py-2 rounded-md focus:outline-none transform hover:scale-105 transition-transform duration-100 font-semibold text-black",
+    "border border-blue-600 text-white px-10 py-2 rounded-md focus:outline-none transform hover:scale-105 transition-transform duration-100 font-semibold text-black",
 };
 
 const LoadingButton: React.FC<LoadingButtonProps> = ({
@@ -23,7 +23,7 @@ const LoadingButton: React.FC<LoadingButtonProps> = ({
       disabled={isLoading}
       onClick={onClick}
       className={variants[variant]}
-      style={{ backgroundColor: "#3898FF" }}
+    //   style={{ backgroundColor: "#3898FF" }}
     >
       {isLoading ? (
         <div className="px-2">
