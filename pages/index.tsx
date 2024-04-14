@@ -1,9 +1,8 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
-import { useChainId } from "wagmi";
+import { useAccount, useChainId, useSendTransaction } from "wagmi";
 import * as React from "react";
-import { useSendTransaction } from "wagmi";
 import { parseEther } from "viem";
 import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
 
@@ -16,6 +15,7 @@ import Header from "../components/Header";
 import Starfield from "../components/StarsBackground";
 import localFont from "next/font/local";
 import Image from "next/image";
+import { CustomConnectBtn } from "../components/CustomConnectBtn";
 
 const petitinhoFont = localFont({ src: "./fonts/Petitinho.ttf" });
 
@@ -36,6 +36,7 @@ const Home: NextPage = () => {
     null
   );
   const [selectedAsset, setSelectedAsset] = useState<DropdownItem | null>(null);
+  const { isConnected } = useAccount();
 
   useEffect(() => {
     if (errorSendTransaction) {
@@ -102,20 +103,22 @@ const Home: NextPage = () => {
           className="p-6 bg-gray-900 rounded-lg shadow-md w-full max-w-sm border border-blue-600"
         >
           <motion.div className="justify-center w-full flex text-xl text-blue-500">
-            {!hash &&
-              (!isLoadingTx ? (
-                error ? (
-                  <motion.div className="text-red-700">
-                    ERROR WITH TX
-                  </motion.div>
+            {isConnected
+              ? !hash &&
+                (!isLoadingTx ? (
+                  error ? (
+                    <motion.div className="text-red-700">
+                      ERROR WITH TX
+                    </motion.div>
+                  ) : (
+                    "CREATE TX"
+                  )
                 ) : (
-                  "CREATE TX"
-                )
-              ) : (
-                "LOADING TRANSACTION..."
-              ))}
+                  "LOADING TRANSACTION..."
+                ))
+              : "AXELAR TOKEN BRIDGE"}
           </motion.div>
-          {!isLoadingTx ? (
+          {isConnected && !isLoadingTx ? (
             hash ? (
               <AnimatePresence>
                 <motion.div className="w-full flex flex-col text-green-400 pt-4 break-all items-center">
@@ -204,7 +207,7 @@ const Home: NextPage = () => {
                 </motion.div>
               </>
             )
-          ) : (
+          ) : isConnected ? (
             <motion.div className="flex w-full items-center justify-center">
               <Image
                 height={100}
@@ -214,6 +217,17 @@ const Home: NextPage = () => {
                 src="/assets/animations/logo.svg"
               />
             </motion.div>
+          ) : (
+              <motion.div className="flex w-full items-center justify-center flex-col">
+                <Image
+                  height={100}
+                  width={100}
+                  className="m-5 my-10"
+                  alt="axelar logo loading animation"
+                  src="/assets/animations/logo.svg"
+                />
+              <CustomConnectBtn />
+              </motion.div>
           )}
         </motion.div>
       </LayoutGroup>
