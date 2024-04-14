@@ -94,6 +94,7 @@ const Home: NextPage = () => {
       <Head>
         <title>Token Bridge</title>
         <link href="/favicon.ico" rel="icon" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
 
       <Header />
@@ -218,16 +219,16 @@ const Home: NextPage = () => {
               />
             </motion.div>
           ) : (
-              <motion.div className="flex w-full items-center justify-center flex-col">
-                <Image
-                  height={100}
-                  width={100}
-                  className="m-5 my-10"
-                  alt="axelar logo loading animation"
-                  src="/assets/animations/logo.svg"
-                />
+            <motion.div className="flex w-full items-center justify-center flex-col">
+              <Image
+                height={100}
+                width={100}
+                className="m-5 my-10"
+                alt="axelar logo loading animation"
+                src="/assets/animations/logo.svg"
+              />
               <CustomConnectBtn />
-              </motion.div>
+            </motion.div>
           )}
         </motion.div>
       </LayoutGroup>
