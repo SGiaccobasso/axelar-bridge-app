@@ -39,7 +39,7 @@ const CreateStepContent: React.FC<CreateStepContentProps> = ({
   return (
     <>
       <motion.div className="justify-center w-full flex text-xl text-blue-500">
-        CREATE TX
+        CREATE TRANSACTION
       </motion.div>
       <label htmlFor="amount" className="mt-5 block font-medium text-white">
         Send:
