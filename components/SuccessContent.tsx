@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 
-import LoadingButton from "../components/LoadingButton";
+import LoadingButton from "./LoadingButton";
 
 interface SuccessContentProps {
   onClickAction: () => void;
