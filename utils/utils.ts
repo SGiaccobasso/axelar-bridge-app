@@ -5,3 +5,5 @@ export const getEnv = (chainId: Number) =>
 
 export const getChain = (chainId: Number) =>
   chainId === 1 ? "ethereum" : "base-sepolia";
+
+export const isNumericInput = (input: string) => /^\d*\.?\d*$/.test(input);
