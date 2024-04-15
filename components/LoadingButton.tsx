@@ -5,11 +5,14 @@ interface LoadingButtonProps {
   onClick: () => void;
   children: React.ReactNode;
   variant?: string;
+  disabled?: boolean;
 }
 
 const variants: Record<string, string> = {
   primary:
-    "border border-blue-600 text-white px-10 py-2 rounded-md focus:outline-none transform hover:scale-105 transition-transform duration-100 font-semibold text-black",
+    "border border-blue-600 text-white px-10 py-2 rounded-md focus:outline-none transform hover:scale-105 transition-transform duration-100 font-semibold",
+  disabled:
+    "border border-gray-600 text-gray-600 px-10 py-2 rounded-md focus:outline-none transform font-semibold",
 };
 
 const LoadingButton: React.FC<LoadingButtonProps> = ({
@@ -17,12 +20,13 @@ const LoadingButton: React.FC<LoadingButtonProps> = ({
   onClick,
   children,
   variant = "primary",
+  disabled = false,
 }) => {
   return (
     <button
-      disabled={isLoading}
+      disabled={isLoading || disabled}
       onClick={onClick}
-      className={variants[variant]}
+      className={disabled ? variants["disabled"] : variants[variant]}
     >
       {isLoading ? (
         <div className="px-2">

@@ -21,8 +21,6 @@ const petitinhoFont = localFont({ src: "./fonts/Petitinho.ttf" });
 
 const Home: NextPage = () => {
   const chain = useChainId();
-  const amountInputRef = useRef<HTMLInputElement>(null);
-  const destinationAddressRef = useRef<HTMLTextAreaElement>(null);
   const [isLoadingTx, setIsLoadingTx] = useState(false);
   const {
     data: hash,
@@ -37,6 +35,22 @@ const Home: NextPage = () => {
   );
   const [selectedAsset, setSelectedAsset] = useState<DropdownItem | null>(null);
   const { isConnected } = useAccount();
+  const [amountInputValue, setAmountInputValue] = useState<string>("0.1");
+  const [destinationAddressValue, setDestinationAddressValue] =
+    useState<string>("");
+
+  const handleAmountInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    if (/^\d*\.?\d*$/.test(inputValue) || inputValue === "") {
+      setAmountInputValue(inputValue);
+    }
+  };
+
+  const handleDestinationAddressChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    setDestinationAddressValue(e.target.value);
+  };
 
   useEffect(() => {
     if (errorSendTransaction) {
@@ -54,26 +68,26 @@ const Home: NextPage = () => {
   const onClickProceed = async () => {
     setIsLoadingTx(true);
     const fromChain = getChain(chain);
-    const amount = amountInputRef.current?.value;
     const symbol = selectedAsset?.id;
     const env = getEnv(chain);
     if (
-      amount &&
+      amountInputValue &&
       selectedToChain?.id &&
-      destinationAddressRef.current?.value &&
+      destinationAddressValue &&
       symbol
     )
       try {
+        let amount = parseFloat(amountInputValue);
         const data = await getDepositAddress(
           fromChain,
           selectedToChain.id,
-          destinationAddressRef.current?.value,
+          destinationAddressValue,
           symbol,
           env
         );
         sendTransaction({
           to: `0x${data.depositAddress.substring(2)}`,
-          value: parseEther(amount),
+          value: parseEther(amountInputValue),
         });
       } catch (e: any) {
         setIsLoadingTx(false);
@@ -158,9 +172,9 @@ const Home: NextPage = () => {
                       inputMode="decimal"
                       disabled={isLoadingTx}
                       type="text"
-                      ref={amountInputRef}
+                      value={amountInputValue}
+                      onChange={handleAmountInputChange}
                       id="amount"
-                      defaultValue={0.00001}
                       placeholder="Enter amount"
                       className="text-right font-medium w-full bg-gray-900 border border-gray-700 rounded-md py-2 px-4 focus:outline-none focus:border-blue-500"
                     />
@@ -183,9 +197,9 @@ const Home: NextPage = () => {
                   <motion.div className="relative flex flex-grow">
                     <textarea
                       disabled={isLoadingTx}
-                      ref={destinationAddressRef}
+                      value={destinationAddressValue}
+                      onChange={handleDestinationAddressChange}
                       id="destinationAddress"
-                      defaultValue="0xb4d04eC2e773A39Ae1C20643EcC2b0b7D094f48a"
                       placeholder="Enter destination address"
                       autoCorrect="off"
                       spellCheck="false"
@@ -203,7 +217,16 @@ const Home: NextPage = () => {
                 </motion.div>
 
                 <motion.div className="mt-10 flex w-full justify-end">
-                  <LoadingButton onClick={onClickProceed}>Send</LoadingButton>
+                  <LoadingButton
+                    onClick={onClickProceed}
+                    disabled={
+                      !destinationAddressValue ||
+                      !amountInputValue ||
+                      parseFloat(amountInputValue) <= 0
+                    }
+                  >
+                    Send
+                  </LoadingButton>
                 </motion.div>
               </>
             )
