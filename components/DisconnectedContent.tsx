@@ -4,14 +4,14 @@ import { CustomConnectBtn } from "./CustomConnectBtn";
 
 const DisconnectedContent: React.FC = () => (
   <>
-    <motion.div className="justify-center w-full flex text-xl text-blue-500">
+    <motion.div className="justify-center w-full flex text-xl text-blue-500 sm:hidden">
       AXELAR TOKEN BRIDGE
     </motion.div>
     <motion.div className="flex w-full items-center justify-center flex-col">
       <Image
         height={100}
         width={100}
-        className="m-5 my-10"
+        className="m-5 my-10 "
         alt="axelar logo loading animation"
         src="/assets/animations/logo.svg"
       />
