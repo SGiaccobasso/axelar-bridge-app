@@ -18,7 +18,7 @@ const TxCard: React.FC = () => {
   const {
     data: hash,
     error: errorSendTransaction,
-    isPending,
+    isPending: isPendingUserApproval,
     reset: resetTx,
     sendTransaction,
   } = useSendTransaction();
@@ -51,7 +51,7 @@ const TxCard: React.FC = () => {
       setError(errorSendTransaction?.message.split("\n")[0]);
     }
     if (hash) setIsLoadingTx(false);
-  }, [errorSendTransaction, isPending]);
+  }, [errorSendTransaction, isPendingUserApproval]);
 
   const onClickFinish = () => {
     setError("");
@@ -110,7 +110,11 @@ const TxCard: React.FC = () => {
             onClickAction={onClickProceed}
           />
         )}
-        {loadingStep && <LoadingStepContent />}
+        {loadingStep && (
+          <LoadingStepContent
+            isWaitingForUserApproval={isPendingUserApproval}
+          />
+        )}
         {disconnectedStep && <DisconnectedContent />}
       </motion.div>
     </LayoutGroup>
