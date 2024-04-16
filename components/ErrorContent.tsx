@@ -11,13 +11,13 @@ const ErrorContent: React.FC<ErrorContentProps> = ({
   onClickAction,
 }) => (
   <AnimatePresence>
-    <motion.div className="justify-center w-full flex text-xl">
+    <motion.div key="error-title" className="justify-center w-full flex text-xl">
       <motion.div className="text-red-500">SOMETHING WENT WRONG</motion.div>
     </motion.div>
-    <motion.div className="w-full my-8 text-red-500">{error}</motion.div>
-    <div className="mt-4 flex w-full justify-end">
+    <motion.div key="error-desc" className="w-full my-8 text-red-500">{error}</motion.div>
+    <motion.div key="err-loading-btn" className="mt-4 flex w-full justify-end">
       <LoadingButton onClick={onClickAction}>ok</LoadingButton>
-    </div>
+    </motion.div>
   </AnimatePresence>
 );
 
