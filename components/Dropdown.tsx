@@ -11,12 +11,14 @@ interface DropdownProps {
   option: Option;
   onSelectValue: (value: DropdownItem) => void;
   value: DropdownItem | null;
+  showArrow?: boolean;
 }
 
 const Dropdown: React.FC<DropdownProps> = ({
   option,
   onSelectValue,
   value,
+  showArrow = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownBtnRef = useRef<HTMLDivElement>(null);
@@ -72,10 +74,13 @@ const Dropdown: React.FC<DropdownProps> = ({
       <motion.button
         whileTap={{ scale: 0.92 }}
         onClick={toggleDropdown}
-        className="w-12"
+        className="w-11"
       >
         {!isLoading && !error && value ? (
-          <div className="flex font-semibold" ref={dropdownBtnRef}>
+          <div
+            className="flex font-semibold hover:scale-105"
+            ref={dropdownBtnRef}
+          >
             <motion.img
               variants={{
                 open: { rotate: 360 },
@@ -83,25 +88,34 @@ const Dropdown: React.FC<DropdownProps> = ({
               }}
               transition={{ duration: 0.3 }}
               style={{ originY: 0.5, originX: 0.5 }}
-              className="w-8 h-8 rounded-full"
+              className="w-11 h-11 p-1 rounded-full border-gray-700 border-2 focus:border-blue-500 hover:border-blue-500 transition-transform duration-100"
               src={value.image}
               alt="Selected user image"
             />
-            <motion.div className="mt-1">
-              {/* {value.name} */}
-              <motion.div
-                variants={{
-                  open: { rotate: 180 },
-                  closed: { rotate: 0 },
-                }}
-                transition={{ duration: 0.2 }}
-                style={{ originY: 0.58, originX: 0.6 }}
-              >
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="#fff">
-                  <path d="M8.71005 11.71L11.3001 14.3C11.6901 14.69 12.3201 14.69 12.7101 14.3L15.3001 11.71C15.9301 11.08 15.4801 10 14.5901 10H9.41005C8.52005 10 8.08005 11.08 8.71005 11.71Z"></path>
-                </svg>
+            {showArrow && (
+              <motion.div className="mt-1">
+                {value.name}
+                <motion.div
+                  variants={
+                    {
+                      open: { rotate: 180 },
+                      closed: { rotate: 0 },
+                    }
+                  }
+                  transition={{ duration: 0.2 }}
+                  style={{ originY: 0.58, originX: 0.45 }}
+                >
+                  <svg
+                    width="28"
+                    height="28"
+                    viewBox="3 0 20 20"
+                    fill="#3898FF"
+                  >
+                    <path d="M8.71005 11.71L11.3001 14.3C11.6901 14.69 12.3201 14.69 12.7101 14.3L15.3001 11.71C15.9301 11.08 15.4801 10 14.5901 10H9.41005C8.52005 10 8.08005 11.08 8.71005 11.71Z"></path>
+                  </svg>
+                </motion.div>
               </motion.div>
-            </motion.div>
+            )}
           </div>
         ) : (
           <div className="mt-1 ml-2">
@@ -111,7 +125,6 @@ const Dropdown: React.FC<DropdownProps> = ({
       </motion.button>
 
       <motion.div
-        id="dropdownUsers"
         className="absolute z-10 bg-white rounded-lg shadow w-60 dark:bg-gray-800 right-0 top-10"
         ref={dropdownRef}
         variants={{
@@ -136,14 +149,14 @@ const Dropdown: React.FC<DropdownProps> = ({
         }}
       >
         <motion.ul
-          className="h-48 py-2 overflow-y-auto text-gray-400 dark:text-gray-200 bg-gray-800"
+          className="h-48 py-2 overflow-y-auto text-gray-400 dark:text-gray-200 bg-gray-800 "
           style={{ pointerEvents: isOpen ? "auto" : "none" }}
         >
           {list &&
             list.map((item, i) => (
               <motion.li key={item.name + i} variants={itemVariants}>
                 <div
-                  className="flex items-center px-4 py-2  hover:bg-black dark:hover:text-white cursor-pointer font-semibold"
+                  className="flex items-center px-4 py-2 hover:bg-black dark:hover:text-white cursor-pointer font-semibold"
                   onClick={() => handleItemClick(item)}
                 >
                   <Image
@@ -152,19 +165,13 @@ const Dropdown: React.FC<DropdownProps> = ({
                     height={26}
                     width={26}
                     onError={(e) => {
-                      console.log(
-                        "eeeeee",
-                        item.image,
-                        item.image.replace(".svg", ".png"),
-                        e
-                      );
                       if (e.currentTarget.src.includes(".svg"))
                         e.currentTarget.src = item.image.replace(
                           ".svg",
                           ".png"
                         );
                       else {
-                        e.currentTarget.src = '/assets/icons/cross.svg'
+                        e.currentTarget.src = "/assets/icons/cross.svg";
                       }
                     }}
                     alt={item.name}
