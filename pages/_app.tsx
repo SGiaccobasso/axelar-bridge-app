@@ -13,7 +13,7 @@ import {
 
 const config = getDefaultConfig({
   appName: "Token Bridge App",
-  projectId: "YOUR_PROJECT_ID",
+  projectId: "TOKEN_BRIDGE",
   chains: [
     mainnet,
     sepolia,
@@ -24,7 +24,7 @@ const config = getDefaultConfig({
 
 const client = new QueryClient();
 
-function MyApp({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps }: AppProps) {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={client}>
@@ -42,4 +42,4 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 }
 
-export default MyApp;
+export default App;
