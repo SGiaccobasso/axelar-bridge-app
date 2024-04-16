@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 
-import LoadingButton from "./LoadingButton";
-import Dropdown from "./Dropdown";
-import { DropdownItem } from "../types/types";
+import LoadingButton from "../../common/LoadingButton";
+import Dropdown from "../../common/Dropdown";
+import { DropdownItem } from "../../../types/types";
 
 interface CreateStepContentProps {
   onClickAction: () => void;

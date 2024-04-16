@@ -1,4 +1,4 @@
-import LoadingSpinner from "./LoadingSpinner";
+import LoadingSpinner from "../animations/LoadingSpinner";
 import { motion } from "framer-motion";
 
 interface LoadingButtonProps {

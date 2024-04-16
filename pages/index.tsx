@@ -3,7 +3,7 @@ import Head from "next/head";
 import localFont from "next/font/local";
 
 import Header from "../components/Header";
-import Starfield from "../components/StarsBackground";
+import Starfield from "../components/animations/StarsBackground";
 import TxCard from "../components/TxCard";
 
 const petitinhoFont = localFont({ src: "./fonts/Petitinho.ttf" });

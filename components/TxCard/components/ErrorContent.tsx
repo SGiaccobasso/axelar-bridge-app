@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 
-import LoadingButton from "./LoadingButton";
+import LoadingButton from "../../common/LoadingButton";
 
 interface ErrorContentProps {
   error: string;

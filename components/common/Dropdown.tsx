@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import { DropdownItem } from "../types/types";
-import useAxelarData from "../hooks/useAxelarData";
+import { DropdownItem } from "../../types/types";
+import useAxelarData from "../../hooks/useAxelarData";
 import { motion, Variants } from "framer-motion";
-import LoadingSpinner from "./LoadingSpinner";
+import LoadingSpinner from "../animations/LoadingSpinner";
 import Image from "next/image";
 
 type Option = "chains" | "assets";

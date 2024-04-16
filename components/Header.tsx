@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { CustomConnectBtn } from "./CustomConnectBtn";
+import { CustomConnectBtn } from "./common/CustomConnectBtn";
 
 const Header = () => {
   return (

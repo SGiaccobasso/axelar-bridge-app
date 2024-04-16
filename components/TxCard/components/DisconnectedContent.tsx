@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { CustomConnectBtn } from "./CustomConnectBtn";
+import { CustomConnectBtn } from "../../common/CustomConnectBtn";
 
 const DisconnectedContent: React.FC = () => (
   <>

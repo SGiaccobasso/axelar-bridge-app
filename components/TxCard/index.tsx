@@ -6,11 +6,11 @@ import { LayoutGroup, motion } from "framer-motion";
 import { getDepositAddress } from "../../utils/axelar";
 import { DropdownItem } from "../../types/types";
 import { getChain, getEnv, isNumericInput } from "../../utils/utils";
-import LoadingStepContent from "../LoadingStepContent";
-import DisconnectedContent from "../DisconnectedContent";
-import SuccessContent from "../SuccessContent";
-import ErrorContent from "../ErrorContent";
-import CreateStepContent from "../CreateStepContent";
+import LoadingStepContent from "./components/LoadingStepContent";
+import DisconnectedContent from "./components/DisconnectedContent";
+import SuccessContent from "./components/SuccessContent";
+import ErrorContent from "./components/ErrorContent";
+import CreateStepContent from "./components/CreateStepContent";
 
 const TxCard: React.FC = () => {
   const chain = useChainId();
