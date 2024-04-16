@@ -96,12 +96,10 @@ const Dropdown: React.FC<DropdownProps> = ({
               <motion.div className="mt-1">
                 {value.name}
                 <motion.div
-                  variants={
-                    {
-                      open: { rotate: 180 },
-                      closed: { rotate: 0 },
-                    }
-                  }
+                  variants={{
+                    open: { rotate: 180 },
+                    closed: { rotate: 0 },
+                  }}
                   transition={{ duration: 0.2 }}
                   style={{ originY: 0.58, originX: 0.45 }}
                 >
@@ -160,7 +158,7 @@ const Dropdown: React.FC<DropdownProps> = ({
                   onClick={() => handleItemClick(item)}
                 >
                   <Image
-                    className="me-2 rounded-full"
+                    className="mr-2 rounded-full h-6 w-6"
                     src={item.image}
                     height={26}
                     width={26}
@@ -176,7 +174,7 @@ const Dropdown: React.FC<DropdownProps> = ({
                     }}
                     alt={item.name}
                   />
-                  {item.name}
+                  <p className="text-sm">{item.name}</p>
                 </div>
               </motion.li>
             ))}
